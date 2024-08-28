@@ -28,6 +28,11 @@ public class CartaService {
         validarSomatorioAtributos(novaCarta);
         return cartaRepository.save(novaCarta);
     }
+    
+    public Carta atualizar(Carta cartaEditada) throws VemNoX1Exception {
+        validarSomatorioAtributos(cartaEditada);
+        return cartaRepository.save(cartaEditada);
+    }
 
 	public void excluir(Integer id) {
 		cartaRepository.deleteById(id);
