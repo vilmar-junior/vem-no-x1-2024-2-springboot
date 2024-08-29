@@ -30,11 +30,6 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-<!--		<dependency>-->
-<!--		    <groupId>com.mysql</groupId>-->
-<!--		    <artifactId>mysql-connector-j</artifactId>-->
-<!--		    <version>8.4.0</version>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -69,6 +64,15 @@
 	      <groupId>org.springframework.boot</groupId>
 	      <artifactId>spring-boot-starter-validation</artifactId>
 	    </dependency>
+	    
+	     <!-- Swagger com OpenAPI  
+	     	acessar via :  http://localhost:8080/swagger-ui.html
+	     -->
+		<dependency>
+		   <groupId>org.springdoc</groupId>
+		   <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+		   <version>2.0.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
