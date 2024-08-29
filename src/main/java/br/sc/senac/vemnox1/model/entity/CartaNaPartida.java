@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import lombok.Data;
 
 @Entity
+@Data
 public class CartaNaPartida {
 	//refs https://www.baeldung.com/jpa-many-to-many
 

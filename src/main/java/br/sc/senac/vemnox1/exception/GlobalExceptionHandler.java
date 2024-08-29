@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
 	//Fonte: https://www.geeksforgeeks.org/exception-handling-in-spring-boot/
     @ExceptionHandler(VemNoX1Exception.class)
     public ResponseEntity<String> handleVemNoX1Exception(VemNoX1Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
