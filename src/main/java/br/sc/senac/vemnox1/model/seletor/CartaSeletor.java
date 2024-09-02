@@ -8,12 +8,12 @@ import lombok.Data;
 public class CartaSeletor extends BaseSeletor{
 	
 	private String nome;
-	private int forcaMinima;
-	private int forcaMaxima;
-	private int inteligenciaMinima;
-	private int inteligenciaMaxima;
-	private int velocidadeMinima;
-	private int velocidadeMaxima;
+	private Integer forcaMinima;
+	private Integer forcaMaxima;
+	private Integer inteligenciaMinima;
+	private Integer inteligenciaMaxima;
+	private Integer velocidadeMinima;
+	private Integer velocidadeMaxima;
 	
 	//filtragem de datas por período (início, fim)
 	private LocalDate dataInicioCadastro;

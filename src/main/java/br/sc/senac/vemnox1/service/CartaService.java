@@ -3,11 +3,14 @@ package br.sc.senac.vemnox1.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.entity.Carta;
 import br.sc.senac.vemnox1.model.repository.CartaRepository;
+import br.sc.senac.vemnox1.model.seletor.CartaSeletor;
+import br.sc.senac.vemnox1.model.specification.CartaSpecification;
 
 @Service
 public class CartaService {
@@ -44,5 +47,9 @@ public class CartaService {
         }
     }
 
-
+	public List<Carta> listarComSeletor(CartaSeletor seletor) {
+		//https://www.baeldung.com/spring-data-jpa-query-by-example
+		Specification<Carta> specification = CartaSpecification.comFiltros(seletor);
+		return cartaRepository.findAll(specification);
+	}
 }
