@@ -16,7 +16,7 @@ public class CartaSpecification {
 	 * 
 	 * root: é uma referência à entidade raiz que você está consultando. 
 	 * No contexto do JPA, isso representa a tabela do banco de dados correspondente 
-	 * à entidade Produto.
+	 * à entidade Carta.
 	 * 
      * query: O parâmetro query representa a consulta JPA que está sendo construída. 
      * Ele é usado para adicionar cláusulas WHERE, JOIN, ORDER BY, entre outras, 
@@ -34,45 +34,32 @@ public class CartaSpecification {
 
             if(seletor.getNome() != null && seletor.getNome().trim().length() > 0) {
             	// WHERE/AND COLUNA OPERADOR VALOR
-            	// WHERE      nome   like    %Café%
-                predicates.add(cb.like(cb.lower(root.get("nome")), "%" 
-                		+ seletor.getNome().toLowerCase() + "%"));
+            	// WHERE      nome   like    '%Popó%'
+               predicates.add(cb.like(root.get("nome"), "%" + seletor.getNome() + "%"));
             }
+            
+            if(seletor.getNomeColecao() != null && seletor.getNomeColecao().trim().length() > 0) {
+            	//Predicado --> operador (comparação), atributo/coluna, valor
+            	//Forma 1: usando somente get
+            	predicates.add(cb.like(root.get("colecao").get("nome"), "%" + seletor.getNomeColecao() + "%"));
+            }
+            
+            if(seletor.getCorColecao() != null && seletor.getCorColecao().trim().length() > 0) {
+            	//Forma 2: usando join
+            	predicates.add(cb.like(root.join("colecao").get("cor"), "%" + seletor.getCorColecao() + "%"));
+            }
+            
             
             aplicarFiltroPeriodo(root, cb, predicates, seletor.getForcaMinima(), seletor.getForcaMaxima(), "forca");
             aplicarFiltroPeriodo(root, cb, predicates, seletor.getInteligenciaMinima(), seletor.getInteligenciaMaxima(), "inteligencia");
             aplicarFiltroPeriodo(root, cb, predicates, seletor.getVelocidadeMinima(), seletor.getVelocidadeMaxima(), "velocidade");
 
-            //EXEMPLO para um atributo intervalado
-//          if(seletor.getPesoMinimo() != null && seletor.getPesoMaximo() != null) {
-//          	//WHERE peso BETWEEN min AND max
-//          	predicates.add(cb.between(root.get("peso"), seletor.getPesoMinimo(), 
-//          			seletor.getPesoMaximo()));
-//          } else if(seletor.getPesoMinimo() != null) {
-//          	//WHERE peso >= min
-//          	predicates.add(cb.greaterThanOrEqualTo(root.get("peso"), seletor.getPesoMinimo()));
-//          } else if(seletor.getPesoMaximo() != null) {
-//          	//WHERE peso <= max
-//          	predicates.add(cb.lessThanOrEqualTo(root.get("peso"), seletor.getPesoMaximo()));
-//          }
-          
-        //EXEMPLO para um atributo de outra tabela
-//          if(seletor.getCnpjFabricante() != null 
-//          		&& !seletor.getCnpjFabricante().isEmpty()) {
-//          	/* select p.* from produtos p 
-//				   inner join fabricantes f on p.id_fabricante = f.id  
-//				   where f.cnpj = '88222333000022'
-//          	 * */
-//          	predicates.add(cb.equal(root.join("fabricanteDoProduto").get("cnpj"), 
-//          					seletor.getCnpjFabricante()));
-//          }
-          
-            
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 
-	private static void aplicarFiltroPeriodo(Root<Carta> root, CriteriaBuilder cb, List<Predicate> predicates,
+	private static void aplicarFiltroPeriodo(Root<Carta> root, 
+			CriteriaBuilder cb, List<Predicate> predicates,
 			Integer valorMinimo, Integer valorMaximo, String nomeAtributo) {
 		  if(valorMinimo != null && valorMaximo != null) {
           	//WHERE atributo BETWEEN min AND max

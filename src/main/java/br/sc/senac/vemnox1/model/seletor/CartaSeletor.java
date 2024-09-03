@@ -15,6 +15,10 @@ public class CartaSeletor extends BaseSeletor{
 	private Integer velocidadeMinima;
 	private Integer velocidadeMaxima;
 	
+	//Filtros da coleção
+	private String nomeColecao;
+	private String corColecao;
+	
 	//filtragem de datas por período (início, fim)
 	private LocalDate dataInicioCadastro;
 	private LocalDate dataFimCadastro;
