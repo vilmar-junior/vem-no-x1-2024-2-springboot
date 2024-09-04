@@ -1,8 +1,10 @@
 package br.sc.senac.vemnox1.service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +50,20 @@ public class CartaService {
     }
 
 	public List<Carta> listarComSeletor(CartaSeletor seletor) {
-		//https://www.baeldung.com/spring-data-jpa-query-by-example
+
 		Specification<Carta> specification = CartaSpecification.comFiltros(seletor);
+		if(seletor.temPaginacao()) {
+			int pageNumber = seletor.getPagina();
+			int pageSize = seletor.getLimite();
+			
+			//Ler com atenção a documentação: 
+			// @param pageNumber zero-based page number, must not be negative.
+			// @param pageSize the size of the page to be returned, must be greater than 0.
+			PageRequest pagina = PageRequest.of(pageNumber - 1, pageSize);
+			return cartaRepository.findAll(specification, pagina).toList();
+		}
+		
+		//https://www.baeldung.com/spring-data-jpa-query-by-example
 		return cartaRepository.findAll(specification);
 	}
 }
