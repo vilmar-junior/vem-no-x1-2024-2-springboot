@@ -24,7 +24,7 @@ public abstract class BaseSeletor {
 		return this.limite > 0 && this.pagina > 0;	
 	}
 	
-	public static void aplicarFiltroPeriodo(Root<Carta> root, 
+	public static void aplicarFiltroIntervalo(Root root, 
 			CriteriaBuilder cb, List<Predicate> predicates,
 			Integer valorMinimo, Integer valorMaximo, String nomeAtributo) {
 		  if(valorMinimo != null && valorMaximo != null) {
@@ -39,7 +39,7 @@ public abstract class BaseSeletor {
           }
 	}
 	
-	public static void aplicarFiltroPeriodo(Root<Carta> root, 
+	public static void aplicarFiltroPeriodo(Root root, 
 			CriteriaBuilder cb, List<Predicate> predicates,
 			LocalDate dataInicial, LocalDate dataFinal, String nomeAtributo) {
 		  if(dataInicial != null && dataFinal != null) {

@@ -70,9 +70,9 @@ public class CartaSeletor extends BaseSeletor implements Specification<Carta>{
          }
          
          
-         aplicarFiltroPeriodo(root, cb, predicates, this.getForcaMinima(), this.getForcaMaxima(), "forca");
-         aplicarFiltroPeriodo(root, cb, predicates, this.getInteligenciaMinima(), this.getInteligenciaMaxima(), "inteligencia");
-         aplicarFiltroPeriodo(root, cb, predicates, this.getVelocidadeMinima(), this.getVelocidadeMaxima(), "velocidade");
+         aplicarFiltroIntervalo(root, cb, predicates, this.getForcaMinima(), this.getForcaMaxima(), "forca");
+         aplicarFiltroIntervalo(root, cb, predicates, this.getInteligenciaMinima(), this.getInteligenciaMaxima(), "inteligencia");
+         aplicarFiltroIntervalo(root, cb, predicates, this.getVelocidadeMinima(), this.getVelocidadeMaxima(), "velocidade");
          aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicioCadastro(), this.getDataFimCadastro(), "dataCadastro");
          
          return cb.and(predicates.toArray(new Predicate[0]));
