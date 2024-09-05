@@ -24,6 +24,10 @@ public abstract class BaseSeletor {
 		return this.limite > 0 && this.pagina > 0;	
 	}
 	
+	public boolean stringValida(String texto) {
+		return texto != null && !texto.isBlank();
+	}
+	
 	public static void aplicarFiltroIntervalo(Root root, 
 			CriteriaBuilder cb, List<Predicate> predicates,
 			Integer valorMinimo, Integer valorMaximo, String nomeAtributo) {

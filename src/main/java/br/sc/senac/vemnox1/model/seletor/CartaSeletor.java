@@ -37,7 +37,9 @@ public class CartaSeletor extends BaseSeletor implements Specification<Carta>{
 	 * @return true caso ao menos um dos atributos tenha sido preenchido
 	 */
 	public boolean temFiltro() {
-		return  (this.nome != null && this.nome.trim().length() > 0) 
+		return  (this.stringValida(this.nome)) 
+			 || (this.stringValida(this.nomeColecao))
+			 || (this.stringValida(this.corColecao))
 			 || (this.forcaMinima > 0)
 			 || (this.forcaMaxima > 0)
 		   	 || (this.inteligenciaMinima > 0)
