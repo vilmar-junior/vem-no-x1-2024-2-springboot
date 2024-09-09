@@ -57,6 +57,11 @@ public class CartaController {
 		Carta carta = cartaService.pesquisarPorId(id);
 		return ResponseEntity.ok(carta);
 	}
+	
+	@PostMapping("/total-paginas")
+	public int contarPaginas(CartaSeletor seletor) {
+		return this.cartaService.contarPaginas(seletor);
+	}
 
 	@Operation(summary = "Inserir nova carta", 
 			   description = "Adiciona uma nova carta ao sistema.",
@@ -68,7 +73,7 @@ public class CartaController {
 						    	 content = @Content(mediaType = "application/json", 
 						    	 examples = @ExampleObject(value = "{\"message\": \"Erro de validação: campo X é obrigatório\", \"status\": 400}")))})
 	@PostMapping
-	public ResponseEntity<Carta> inserir(@Valid @RequestBody Carta novaCarta) {
+	public ResponseEntity<Carta> salvar(@Valid @RequestBody Carta novaCarta) {
 		//Solução 1: tratar o response HTTP em cada exceção lançada
 		try {
 			Carta cartaSalva = cartaService.inserir(novaCarta);
@@ -86,7 +91,7 @@ public class CartaController {
 
 	@Operation(summary = "Deletar carta por ID", description = "Remove uma carta específica pelo seu ID.")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletarPorId(@PathVariable Integer id) {
+	public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 		cartaService.excluir(id);
 		return ResponseEntity.noContent().build();
 	}

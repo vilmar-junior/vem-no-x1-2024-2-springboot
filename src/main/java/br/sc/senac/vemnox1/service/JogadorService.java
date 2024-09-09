@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.entity.Jogador;
-import br.sc.senac.vemnox1.model.repository.CartaRepository;
 import br.sc.senac.vemnox1.model.repository.JogadorRepository;
 
 @Service
@@ -37,5 +36,10 @@ public class JogadorService {
 		}
 		
 		return repository.save(jogadorAtualizado);
+	}
+
+	public boolean excluir(int id) {
+		this.repository.deleteById(id);
+		return true;
 	}
 }

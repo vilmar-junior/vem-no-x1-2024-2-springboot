@@ -61,4 +61,8 @@ public class CartaService {
 		//https://www.baeldung.com/spring-data-jpa-query-by-example
 		return cartaRepository.findAll(seletor);
 	}
+
+	public int contarPaginas(CartaSeletor seletor) {
+		return (int) cartaRepository.count(seletor);
+	}
 }
