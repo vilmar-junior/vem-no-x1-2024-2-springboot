@@ -1,5 +1,6 @@
 package br.sc.senac.vemnox1.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,9 @@ public class CartaService {
 
 	public int contarPaginas(CartaSeletor seletor) {
 		return (int) cartaRepository.count(seletor);
+	}
+
+	public ArrayList<Carta> sortearSeisCartas() {
+		return this.cartaRepository.sortearSeisCartas();
 	}
 }

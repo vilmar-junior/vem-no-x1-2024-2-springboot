@@ -1,5 +1,6 @@
 package br.sc.senac.vemnox1.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +95,10 @@ public class CartaController {
 	public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 		cartaService.excluir(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/sortear")
+	public ArrayList<Carta> sortear(){
+		return this.cartaService.sortearSeisCartas();
 	}
 }

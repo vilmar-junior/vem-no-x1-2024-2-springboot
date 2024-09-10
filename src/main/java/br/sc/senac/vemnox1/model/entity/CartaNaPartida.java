@@ -1,5 +1,7 @@
 package br.sc.senac.vemnox1.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -20,6 +22,7 @@ public class CartaNaPartida {
 	@JoinColumn(name = "id_carta")
 	Carta carta;
 
+	@JsonBackReference
 	@ManyToOne
 	@MapsId("idPartida")
 	@JoinColumn(name = "id_partida")
