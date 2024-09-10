@@ -7,6 +7,8 @@ import java.util.List;
 
 import br.sc.senac.vemnox1.model.enums.Resultado;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +34,8 @@ public class Partida {
 	private int roundsVencidosJogador;
 	private int roundsVencidosCpu;
 	private int roundsEmpatados;
+	
+	@Enumerated(EnumType.STRING)
 	private Resultado resultado;
 	private LocalDateTime data;
 	private boolean jogouForca;

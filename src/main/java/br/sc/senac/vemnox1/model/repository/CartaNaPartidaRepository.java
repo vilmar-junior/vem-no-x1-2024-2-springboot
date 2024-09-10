@@ -12,7 +12,9 @@ import br.sc.senac.vemnox1.model.entity.CartaNaPartidaPk;
 @Repository
 public interface CartaNaPartidaRepository extends JpaRepository<CartaNaPartida, CartaNaPartidaPk>, JpaSpecificationExecutor<CartaNaPartida>{
 
-	@Query("SELECT cp FROM CartaNaPartida cp WHERE cp.partida.id = :idPartida AND cp.carta.id = :idCarta")
+	//Exemplo com JPQL
+	@Query("SELECT cp FROM CartaNaPartida cp WHERE "
+			+ " cp.partida.id = :idPartida AND cp.carta.id = :idCarta")
 	CartaNaPartida findByJogada(int idPartida, int idCarta);
 
 }

@@ -143,7 +143,12 @@ public class PartidaService {
 
 	public PartidaDTO jogar(JogadaDTO jogada) throws VemNoX1Exception {
 		Partida partida = partidaRepository.findById(jogada.getIdPartida()).get();
-		CartaNaPartida cartaSelecionadaPeloJogador = cartaNaPartidaRepository.findByJogada(jogada.getIdPartida(), jogada.getIdCartaSelecionada());
+		
+		CartaNaPartida cartaSelecionadaPeloJogador = 
+				cartaNaPartidaRepository.findByJogada(
+						jogada.getIdPartida(), jogada.getIdCartaSelecionada());
+		
+		
 		String atributoSelecionado = jogada.getAtributoSelecionado();
 		int valorAtributoJogador = obterValorAtributo(cartaSelecionadaPeloJogador.getCarta(), atributoSelecionado);
 		

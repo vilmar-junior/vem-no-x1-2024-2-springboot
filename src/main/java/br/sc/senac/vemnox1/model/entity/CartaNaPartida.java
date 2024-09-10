@@ -20,13 +20,13 @@ public class CartaNaPartida {
 	@ManyToOne
 	@MapsId("idCarta")
 	@JoinColumn(name = "id_carta")
-	Carta carta;
+	private Carta carta;
 
 	@JsonBackReference
 	@ManyToOne
 	@MapsId("idPartida")
 	@JoinColumn(name = "id_partida")
-	Partida partida;
+	private Partida partida;
 
 	private boolean pertenceAoJogador;
 	private boolean utilizada;
