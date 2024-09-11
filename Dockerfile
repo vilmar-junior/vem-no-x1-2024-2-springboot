@@ -1,5 +1,5 @@
 # Stage 1: Build the application with Maven
-FROM maven:3.8.4-openjdk-11 AS build
+FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 
 # Copy the Maven configuration files
@@ -12,7 +12,9 @@ RUN mvn clean package -DskipTests && \
     mvn dependency:copy-dependencies -DoutputDirectory=dependency-jars
 
 # Stage 2: Create the final image with Tomcat
-FROM tomcat:10.1-jdk11-openjdk-slim
+#FROM tomcat:10.1-jdk11-openjdk-slim
+FROM tomcat:jdk17
+
 
 # Remove default Tomcat applications
 RUN rm -rf /usr/local/tomcat/webapps/*
