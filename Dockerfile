@@ -23,9 +23,6 @@ COPY --from=build /app/target/vemnox1-0.0.1-SNAPSHOT.war /usr/local/tomcat/webap
 # Copy the dependencies from the build stage to Tomcat's lib directory
 COPY --from=build /app/dependency-jars /usr/local/tomcat/lib/
 
-# Copy context.xml to Tomcat's conf directory
-COPY src/main/webapp/META-INF/Context.xml /usr/local/tomcat/conf/context.xml
-
 # Expose the port your app runs on
 EXPOSE 8080
 
