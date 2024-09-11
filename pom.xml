@@ -13,6 +13,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>VemNoX1</name>
 	<description>Vem no X1 V2 - SpringBoot</description>
+
+	<!-- Adicionando para posterior deploy no render -->
+	<packaging>war</packaging>
+	
 	<url/>
 	<licenses>
 		<license/>
@@ -79,6 +83,13 @@
 		   <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 		   <version>2.0.2</version>
 		</dependency>
+		
+		<!-- Adicionando para posterior deploy no render -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
