@@ -2,14 +2,14 @@
 #
 # Build stage
 #
-FROM maven:3.8.2-jdk-11 AS build
+FROM maven:3.8.4-jdk-17 AS build
 COPY . .
 RUN mvn clean package -DskipTests
 
 #
 # Package stage
 #
-FROM openjdk:11-jdk-slim
+FROM tomcat:jdk17
 COPY --from=build /target/vemnox1-0.0.1-SNAPSHOT.jar vemnox1.jar
 # ENV PORT=8080
 EXPOSE 8080
