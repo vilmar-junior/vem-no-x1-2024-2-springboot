@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import br.sc.senac.vemnox1.model.entity.Jogador;
 
 @Repository
-public interface JogadorRepository extends JpaRepository<Jogador, Integer>, JpaSpecificationExecutor<JogadorRepository>{
+public interface JogadorRepository extends JpaRepository<Jogador, Integer>, JpaSpecificationExecutor<Jogador>{
 
 }
