@@ -9,13 +9,11 @@ spring.datasource.password=root
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 #DataSource remoto no render.com (PostgreSQL)
-
-
 #spring.datasource.url=jdbc:postgresql://dpg-crgudcdsvqrc7385orpg-a.oregon-postgres.render.com:5432/vemnox1_z0tn
 #spring.datasource.username=senac
 #spring.datasource.password=SRGxgk0AY8M76X0yXfTJUKIHTIKmjeOA
 #spring.datasource.driver-class-name=org.postgresql.Driver
-#String para de conexão para o DBeaver jdbc:postgresql://dpg-crgudcdsvqrc7385orpg-a.oregon-postgres.render.com:5432/vemnox1_z0tn
+#String para de conexï¿½o para o DBeaver jdbc:postgresql://dpg-crgudcdsvqrc7385orpg-a.oregon-postgres.render.com:5432/vemnox1_z0tn
 
 
 #Contexto alterado de "http://localhost:8080/api/" para  "http://localhost:8080/vemnox1/api"

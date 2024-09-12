@@ -34,12 +34,7 @@ public class Carta {
 	
 	@NotBlank(message = "Nome é obrigatório")
 	@Size(min = 3, max = 255)
-	@Column(name = "nm_nome")
 	private String nome;
-	
-	@Email
-	@NotBlank
-	private String email;
 	
 	@Min(1)
 	@Max(5)
