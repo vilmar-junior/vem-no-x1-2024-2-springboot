@@ -9,6 +9,7 @@ import br.sc.senac.vemnox1.model.enums.Resultado;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,7 +30,7 @@ public class Partida {
 	@JoinColumn(name = "jogador_fk")
 	private Jogador jogador; 
 	
-	@OneToMany(mappedBy = "partida")
+	@OneToMany(mappedBy = "partida", fetch = FetchType.EAGER)
     private List<CartaNaPartida> cartas = new ArrayList<>();  // Inicialize a lista aqui
 	private int roundsVencidosJogador;
 	private int roundsVencidosCpu;

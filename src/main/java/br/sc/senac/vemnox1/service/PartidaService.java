@@ -36,7 +36,7 @@ public class PartidaService {
 	private JogadorRepository jogadorRepository;
 	
 	@Autowired
-	private CartaRepository cartaRepository;
+	private CartaService cartaService;
 	
 	@Autowired
 	private CartaNaPartidaRepository cartaNaPartidaRepository;
@@ -88,7 +88,7 @@ public class PartidaService {
 		novaPartida = partidaRepository.save(novaPartida);
 		
 		//Sortear as 6 cartas -> sortearCartas [CartaRepository]
-		ArrayList<Carta> seisCartas = cartaRepository.sortearSeisCartas();
+		ArrayList<Carta> seisCartas = cartaService.sortearSeisCartas();
 		ArrayList<CartaNaPartida> cartasDoJogador = new ArrayList<CartaNaPartida>();
 		
 		//Distribuir para jogador e CPU -> inserir CartaPartida
@@ -148,6 +148,14 @@ public class PartidaService {
 				cartaNaPartidaRepository.findByJogada(
 						jogada.getIdPartida(), jogada.getIdCartaSelecionada());
 		
+		
+		if(partida == null) {
+			throw new VemNoX1Exception("Partida não encontrada");
+		}
+		
+		if(cartaSelecionadaPeloJogador == null) {
+			throw new VemNoX1Exception("Carta não encontrada");
+		}
 		
 		String atributoSelecionado = jogada.getAtributoSelecionado();
 		int valorAtributoJogador = obterValorAtributo(cartaSelecionadaPeloJogador.getCarta(), atributoSelecionado);

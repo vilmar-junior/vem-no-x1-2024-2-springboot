@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
+import br.sc.senac.vemnox1.model.dto.CartaDTO;
 import br.sc.senac.vemnox1.model.entity.Carta;
 import br.sc.senac.vemnox1.model.seletor.CartaSeletor;
 import br.sc.senac.vemnox1.service.CartaService;
@@ -100,5 +101,10 @@ public class CartaController {
 	@GetMapping("/sortear")
 	public ArrayList<Carta> sortear(){
 		return this.cartaService.sortearSeisCartas();
+	}
+	
+	@GetMapping("/dto/todas")
+	public ArrayList<CartaDTO> pesquisarTodasDTO(){
+		return this.cartaService.pesquisarTodasDTO();
 	}
 }

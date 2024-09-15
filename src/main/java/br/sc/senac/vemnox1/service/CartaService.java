@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
+import br.sc.senac.vemnox1.model.dto.CartaDTO;
 import br.sc.senac.vemnox1.model.entity.Carta;
 import br.sc.senac.vemnox1.model.repository.CartaRepository;
 import br.sc.senac.vemnox1.model.seletor.CartaSeletor;
@@ -17,6 +19,9 @@ public class CartaService {
 	
 	@Autowired
 	private CartaRepository cartaRepository;
+	
+	@Value("${vemnox1.datasource}")
+	private String dataSourceVigente;
 	
 	public List<Carta> pesquisarTodas(){
 		return cartaRepository.findAll();
@@ -68,6 +73,16 @@ public class CartaService {
 	}
 
 	public ArrayList<Carta> sortearSeisCartas() {
-		return this.cartaRepository.sortearSeisCartas();
+		ArrayList<Carta> cartasSorteadas = null;
+		if(dataSourceVigente.equals("mysql")) {
+			cartasSorteadas = this.cartaRepository.sortearSeisCartasMySQL();
+		}else {
+			cartasSorteadas = this.cartaRepository.sortearSeisCartasPostgres();
+		}
+		return cartasSorteadas;
+	}
+
+	public ArrayList<CartaDTO> pesquisarTodasDTO() {
+		return this.cartaRepository.pesquisarTodasDTO();
 	}
 }
