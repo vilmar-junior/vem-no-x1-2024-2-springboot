@@ -49,7 +49,7 @@ public class CartaController {
 			   description = "Retorna uma lista de cartas que atendem aos critérios especificados no seletor.")
 	@PostMapping("/filtro")
 	public List<Carta> pesquisarComSeletor(@RequestBody CartaSeletor seletor) {
-		return cartaService.listarComSeletor(seletor);
+		return cartaService.pesquisarComSeletor(seletor);
 	}
 
 	@Operation(summary = "Pesquisar carta por ID", 
@@ -106,5 +106,12 @@ public class CartaController {
 	@GetMapping("/dto/todas")
 	public ArrayList<CartaDTO> pesquisarTodasDTO(){
 		return this.cartaService.pesquisarTodasDTO();
+	}
+	
+	@Operation(summary = "Pesquisar cartas com filtros (retorna CartaDTO)", 
+			   description = "Retorna uma lista de CartaDTO conforme os critérios especificados no seletor.")
+	@PostMapping("/dto/filtro")
+	public List<CartaDTO> pesquisarComSeletorDTO(@RequestBody CartaSeletor seletor) {
+		return this.cartaService.pesquisarComSeletorDTO(seletor);
 	}
 }

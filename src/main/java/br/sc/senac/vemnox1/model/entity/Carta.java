@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import br.sc.senac.vemnox1.model.dto.CartaDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -53,5 +54,19 @@ public class Carta {
 	
     public int getTotalAtributos() {
         return this.forca + this.inteligencia + this.velocidade;
+    }
+    
+    public static CartaDTO toDTO(Carta carta, long quantidadeUsosEmPartidasPelaCPU, long quantidadeUsosEmPartidasPorAlgumJogador) {
+        return new CartaDTO(
+            carta.getId(),
+            carta.getNome(),
+            carta.getForca(),
+            carta.getInteligencia(),
+            carta.getVelocidade(),
+            carta.getDataCadastro(),
+            String.format("Força: %d, Inteligência: %d, Velocidade: %d", carta.getForca(), carta.getInteligencia(), carta.getVelocidade()),
+            quantidadeUsosEmPartidasPelaCPU,
+            quantidadeUsosEmPartidasPorAlgumJogador
+        );
     }
 }

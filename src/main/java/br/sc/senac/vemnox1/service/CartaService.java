@@ -2,6 +2,7 @@ package br.sc.senac.vemnox1.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.dto.CartaDTO;
 import br.sc.senac.vemnox1.model.entity.Carta;
+import br.sc.senac.vemnox1.model.repository.CartaNaPartidaRepository;
 import br.sc.senac.vemnox1.model.repository.CartaRepository;
 import br.sc.senac.vemnox1.model.seletor.CartaSeletor;
 
@@ -19,6 +21,9 @@ public class CartaService {
 	
 	@Autowired
 	private CartaRepository cartaRepository;
+	
+	@Autowired
+	private CartaNaPartidaRepository cartaNaPartidaRepository;
 	
 	@Value("${vemnox1.datasource}")
 	private String dataSourceVigente;
@@ -52,7 +57,7 @@ public class CartaService {
         }
     }
 
-	public List<Carta> listarComSeletor(CartaSeletor seletor) {
+	public List<Carta> pesquisarComSeletor(CartaSeletor seletor) {
 		if(seletor.temPaginacao()) {
 			int pageNumber = seletor.getPagina();
 			int pageSize = seletor.getLimite();
@@ -84,5 +89,20 @@ public class CartaService {
 
 	public ArrayList<CartaDTO> pesquisarTodasDTO() {
 		return this.cartaRepository.pesquisarTodasDTO();
+	}
+
+	public List<CartaDTO> pesquisarComSeletorDTO(CartaSeletor seletor) {
+		//Opção 1: consultar uma lista de Carta e converter para CartaDTO
+		List<Carta> cartas = this.pesquisarComSeletor(seletor);
+		return cartas.stream()
+					 .map(carta -> {
+			            long quantidadeUsosEmPartidasPelaCPU = this.cartaNaPartidaRepository.countByPartidas(carta.getId(), false);
+			            long quantidadeUsosEmPartidasPorAlgumJogador = this.cartaNaPartidaRepository.countByPartidas(carta.getId(), true);
+			            return Carta.toDTO(carta, quantidadeUsosEmPartidasPelaCPU, quantidadeUsosEmPartidasPorAlgumJogador);
+			          })
+			         .collect(Collectors.toList());
+		
+		//Opção 2: usando método no Repository (mas há problemas nos filtros)
+		//return this.cartaRepository.pesquisarComSeletorDTO(seletor);
 	}
 }
