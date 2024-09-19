@@ -1,6 +1,7 @@
 package br.sc.senac.vemnox1.model.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ public class CartaDTO {
 	private int forca;
 	private int inteligencia;
 	private int velocidade;
-	private LocalDate dataCadastro;
+	private LocalDateTime dataCadastro;
 	
 	//Atributos que não existem na CARTA diretamente	
 	private String descricaoAtributos;

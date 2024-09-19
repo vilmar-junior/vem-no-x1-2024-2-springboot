@@ -25,6 +25,7 @@ public class CartaService {
 	@Autowired
 	private CartaNaPartidaRepository cartaNaPartidaRepository;
 	
+	//Propriedade definida no application.properties
 	@Value("${vemnox1.datasource}")
 	private String dataSourceVigente;
 	
@@ -96,8 +97,13 @@ public class CartaService {
 		List<Carta> cartas = this.pesquisarComSeletor(seletor);
 		return cartas.stream()
 					 .map(carta -> {
-			            long quantidadeUsosEmPartidasPelaCPU = this.cartaNaPartidaRepository.countByPartidas(carta.getId(), false);
-			            long quantidadeUsosEmPartidasPorAlgumJogador = this.cartaNaPartidaRepository.countByPartidas(carta.getId(), true);
+			            long quantidadeUsosEmPartidasPelaCPU 
+			            	= this.cartaNaPartidaRepository.countByPartidas(carta.getId(), false);
+			            
+			            long quantidadeUsosEmPartidasPorAlgumJogador 
+			            	= this.cartaNaPartidaRepository.countByPartidas(carta.getId(), true);
+			            
+			            
 			            return Carta.toDTO(carta, quantidadeUsosEmPartidasPelaCPU, quantidadeUsosEmPartidasPorAlgumJogador);
 			          })
 			         .collect(Collectors.toList());

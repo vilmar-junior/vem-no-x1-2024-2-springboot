@@ -1,6 +1,7 @@
 package br.sc.senac.vemnox1.model.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -50,7 +51,7 @@ public class Carta {
 	private int velocidade;
 	
 	@CreationTimestamp
-	private LocalDate dataCadastro;
+	private LocalDateTime dataCadastro;
 	
     public int getTotalAtributos() {
         return this.forca + this.inteligencia + this.velocidade;
