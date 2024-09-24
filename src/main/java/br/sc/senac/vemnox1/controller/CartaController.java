@@ -1,6 +1,5 @@
 package br.sc.senac.vemnox1.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,12 +98,12 @@ public class CartaController {
 	}
 	
 	@GetMapping("/sortear")
-	public ArrayList<Carta> sortear(){
+	public List<Carta> sortear(){
 		return this.cartaService.sortearSeisCartas();
 	}
 	
 	@GetMapping("/dto/todas")
-	public ArrayList<CartaDTO> pesquisarTodasDTO(){
+	public List<CartaDTO> pesquisarTodasDTO(){
 		return this.cartaService.pesquisarTodasDTO();
 	}
 	

@@ -83,6 +83,17 @@
 		   <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 		   <version>2.0.2</version>
 		</dependency>
+	
+			<!-- 
+				Descomente para usar uma base H2 (em memória) para os testes
+				Quando descomentar, também troque as anotações @SpringBootTest por @DataJpaTest
+				em todos as classes *RepositoryTest
+			-->
+<!--		<dependency>-->
+<!--		    <groupId>com.h2database</groupId>-->
+<!--		    <artifactId>h2</artifactId>-->
+<!--		    <scope>test</scope>-->
+<!--		</dependency>-->
 		
 		<!-- Adicionando para posterior deploy no render -->
 <!--        <dependency>-->

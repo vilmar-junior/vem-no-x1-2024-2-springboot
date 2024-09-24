@@ -17,7 +17,6 @@ import br.sc.senac.vemnox1.model.entity.Jogador;
 import br.sc.senac.vemnox1.model.entity.Partida;
 import br.sc.senac.vemnox1.model.enums.Resultado;
 import br.sc.senac.vemnox1.model.repository.CartaNaPartidaRepository;
-import br.sc.senac.vemnox1.model.repository.CartaRepository;
 import br.sc.senac.vemnox1.model.repository.JogadorRepository;
 import br.sc.senac.vemnox1.model.repository.PartidaRepository;
 
@@ -88,7 +87,7 @@ public class PartidaService {
 		novaPartida = partidaRepository.save(novaPartida);
 		
 		//Sortear as 6 cartas -> sortearCartas [CartaRepository]
-		ArrayList<Carta> seisCartas = cartaService.sortearSeisCartas();
+		List<Carta> seisCartas = cartaService.sortearSeisCartas();
 		ArrayList<CartaNaPartida> cartasDoJogador = new ArrayList<CartaNaPartida>();
 		
 		//Distribuir para jogador e CPU -> inserir CartaPartida

@@ -1,6 +1,5 @@
 package br.sc.senac.vemnox1.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,9 +77,9 @@ public class CartaService {
 		return (int) cartaRepository.count(seletor);
 	}
 
-	public ArrayList<Carta> sortearSeisCartas() {
-		ArrayList<Carta> cartasSorteadas = null;
-		if(dataSourceVigente.equals("mysql")) {
+	public List<Carta> sortearSeisCartas() {
+		List<Carta> cartasSorteadas = null;
+		if(dataSourceVigente == null || dataSourceVigente.equals("mysql")) {
 			cartasSorteadas = this.cartaRepository.sortearSeisCartasMySQL();
 		}else {
 			cartasSorteadas = this.cartaRepository.sortearSeisCartasPostgres();
@@ -88,7 +87,7 @@ public class CartaService {
 		return cartasSorteadas;
 	}
 
-	public ArrayList<CartaDTO> pesquisarTodasDTO() {
+	public List<CartaDTO> pesquisarTodasDTO() {
 		return this.cartaRepository.pesquisarTodasDTO();
 	}
 
@@ -97,14 +96,23 @@ public class CartaService {
 		List<Carta> cartas = this.pesquisarComSeletor(seletor);
 		return cartas.stream()
 					 .map(carta -> {
-			            long quantidadeUsosEmPartidasPelaCPU 
-			            	= this.cartaNaPartidaRepository.countByPartidas(carta.getId(), false);
-			            
-			            long quantidadeUsosEmPartidasPorAlgumJogador 
-			            	= this.cartaNaPartidaRepository.countByPartidas(carta.getId(), true);
-			            
-			            
-			            return Carta.toDTO(carta, quantidadeUsosEmPartidasPelaCPU, quantidadeUsosEmPartidasPorAlgumJogador);
+						 	if (carta == null) {
+				                return null; // correção realizada após a execução dos testes
+				            }
+						 	
+						 	 Integer id = carta.getId();
+				            if (id == null) {
+				                throw new IllegalArgumentException("ID da carta não pode ser nulo.");
+				            }
+						 
+							 long quantidadeUsosEmPartidasPelaCPU 
+							 = this.cartaNaPartidaRepository.countByPartidas(carta.getId(), false);
+							 
+							 long quantidadeUsosEmPartidasPorAlgumJogador 
+							 = this.cartaNaPartidaRepository.countByPartidas(carta.getId(), true);
+							 
+							 
+							 return Carta.toDTO(carta, quantidadeUsosEmPartidasPelaCPU, quantidadeUsosEmPartidasPorAlgumJogador);
 			          })
 			         .collect(Collectors.toList());
 		
