@@ -22,7 +22,7 @@ public interface CartaRepository extends JpaRepository<Carta, Integer>, JpaSpeci
 	        + " SUM(CASE WHEN cp.pertenceAoJogador = true THEN 1 ELSE 0 END) AS quantidadeUsosEmPartidasPorAlgumJogador " 
 	        + ") "
 			+ "FROM CartaNaPartida cp " 
-			+ "JOIN cp.carta c "   // Fazendo JOIN a partir de CartaNaPartida para Carta
+			+ "RIGHT JOIN cp.carta c "   // Fazendo JOIN a partir de CartaNaPartida para Carta
 			+ "GROUP BY c.id")
 	List<CartaDTO> pesquisarTodasDTO();
 

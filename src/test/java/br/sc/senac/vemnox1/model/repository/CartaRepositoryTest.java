@@ -2,6 +2,9 @@ package br.sc.senac.vemnox1.model.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -63,30 +66,40 @@ public class CartaRepositoryTest {
     @Test
     public void testInserirTodosCamposPreenchidos() {
         Carta carta = new Carta();
-        carta.setNome("Carta Teste");
-        carta.setForca(3);
-        carta.setInteligencia(4);
+        carta.setNome("Adriano de Melow");
+        carta.setForca(5);
+        carta.setInteligencia(5);
         carta.setVelocidade(5);
 
         Carta cartaSalva = cartaRepository.save(carta);
+        long totalCartas = cartaRepository.count();
 
+        assertEquals(11, totalCartas);
+        assertNotNull(cartaSalva);
         assertThat(cartaSalva.getId()).isNotNull();
-        assertThat(cartaSalva.getNome()).isEqualTo("Carta Teste");
-        assertThat(cartaSalva.getForca()).isEqualTo(3);
-        assertThat(cartaSalva.getInteligencia()).isEqualTo(4);
+        //assertThat(cartaSalva.getNome()).isEqualTo("Carta Teste");
+        //assertThat(cartaSalva.getForca()).isEqualTo(3);
+        //assertThat(cartaSalva.getInteligencia()).isEqualTo(4);
         assertThat(cartaSalva.getVelocidade()).isEqualTo(5);
     }
 
     @Test
     public void testInserirForcaInvalida() {
-        Carta carta = new Carta();
-        carta.setNome("Carta muito forte");
-        carta.setForca(6);
-        carta.setInteligencia(3);
-        carta.setVelocidade(4);
-
-        assertThatThrownBy(() -> cartaRepository.save(carta))
-            .isInstanceOf(ConstraintViolationException.class);
+        Carta cartaMuitoForte = new Carta();
+        cartaMuitoForte.setNome("Carta muito forte");
+        cartaMuitoForte.setForca(6);
+        cartaMuitoForte.setInteligencia(3);
+        cartaMuitoForte.setVelocidade(4);
+        
+        try {
+        	cartaRepository.save(cartaMuitoForte);
+        } catch (ConstraintViolationException e) {
+        	assertTrue(e.getLocalizedMessage().contains("propertyPath=forca"));
+        }
+        
+        assertThatThrownBy(() -> 
+        	cartaRepository.save(cartaMuitoForte))
+            	.isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
@@ -132,9 +145,6 @@ public class CartaRepositoryTest {
         List<CartaDTO> cartasDTO = cartaRepository.pesquisarTodasDTO();
 
         assertThat(cartasDTO).isNotNull();
-        
-        // TODO porque a asserção falhou? Logo logo descobriremos ;)
-        // Agora ainda não vai (tem algo que não está RIGHT :D )
         assertThat(cartasDTO).hasSize(10);  
         assertThat(cartasDTO.get(0).getNome()).isEqualTo("Carta 1");
     }

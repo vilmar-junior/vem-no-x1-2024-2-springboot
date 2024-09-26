@@ -58,7 +58,7 @@ public class CartaService {
     }
 
 	public List<Carta> pesquisarComSeletor(CartaSeletor seletor) {
-		if(seletor.temPaginacao()) {
+		if(seletor != null && seletor.temPaginacao()) {
 			int pageNumber = seletor.getPagina();
 			int pageSize = seletor.getLimite();
 			
@@ -106,10 +106,10 @@ public class CartaService {
 				            }
 						 
 							 long quantidadeUsosEmPartidasPelaCPU 
-							 = this.cartaNaPartidaRepository.countByPartidas(carta.getId(), false);
+							 	= this.cartaNaPartidaRepository.countByPartidas(carta.getId(), false);
 							 
 							 long quantidadeUsosEmPartidasPorAlgumJogador 
-							 = this.cartaNaPartidaRepository.countByPartidas(carta.getId(), true);
+							 	= this.cartaNaPartidaRepository.countByPartidas(carta.getId(), true);
 							 
 							 
 							 return Carta.toDTO(carta, quantidadeUsosEmPartidasPelaCPU, quantidadeUsosEmPartidasPorAlgumJogador);
