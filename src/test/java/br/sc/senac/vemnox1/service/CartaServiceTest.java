@@ -1,6 +1,7 @@
 package br.sc.senac.vemnox1.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -143,7 +144,7 @@ public class CartaServiceTest {
 
     @Test
     @DisplayName("Deve excluir uma carta por ID")
-    public void testExcluir() {
+    public void testExcluirCasoSucesso() {
     	Carta novaCarta = new Carta();
     	novaCarta.setId(2);
         novaCarta.setForca(2);
@@ -163,8 +164,31 @@ public class CartaServiceTest {
 	    cartaRepository.save(novaCarta);
 	    cartaNaPartidaRepository.save(cartaNaPartida);
 	    
-        cartaService.excluir(2);
+        try {
+			cartaService.excluir(2);
+		} catch (VemNoX1Exception e) {
+			fail("Carta 2 deveria ter sido excluída com sucesso");
+		}
         verify(cartaRepository, times(1)).deleteById(2);
+    }
+    
+    @Test
+    @DisplayName("Deve lançar exceção ao tentar excluir uma carta já usada em uma partida")
+    public void testExcluirCasoCartaJaUsadaEmPartida() {
+    	Integer idCartaParaExcluir = 3;
+    	
+		// Simulação (mock) do repositório: a carta já foi utilizada em 5 partidas (valor arbitrado)
+        when(cartaNaPartidaRepository.countByIdCarta(idCartaParaExcluir)).thenReturn(5L);
+
+        VemNoX1Exception excecaoEsperada = Assertions.assertThrows(VemNoX1Exception.class, () -> {
+			cartaService.excluir(idCartaParaExcluir);
+        });
+
+        // Valida a mensagem de erro lançada no CartaService
+        assertThat(excecaoEsperada.getMessage()).contains("já utilizada em partida(s), logo não pode ser excluída");
+        
+		// Verifica que o método deleteById do repositório não foi chamado
+        verify(cartaRepository, times(0)).deleteById(idCartaParaExcluir);
     }
 
     @Test

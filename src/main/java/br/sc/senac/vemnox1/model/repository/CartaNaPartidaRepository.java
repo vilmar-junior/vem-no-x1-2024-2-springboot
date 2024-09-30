@@ -20,5 +20,9 @@ public interface CartaNaPartidaRepository extends JpaRepository<CartaNaPartida, 
 	 // Exemplo com JPQL para contar a quantidade de partidas jogadas pela CPU
     @Query("SELECT COUNT(cp) FROM CartaNaPartida cp WHERE cp.carta.id = :idCarta AND cp.pertenceAoJogador = :pertenceAoJogador")
     long countByPartidas(Integer idCarta, Boolean pertenceAoJogador);
+
+    // Exemplo com JPQL para contar a quantidade de partidas jogadas pela CPU
+    @Query("SELECT COUNT(cp) FROM CartaNaPartida cp WHERE cp.carta.id = :idCarta")
+	long countByIdCarta(Integer idCarta);
 	
 }

@@ -47,7 +47,14 @@ public class CartaService {
         return cartaRepository.save(cartaEditada);
     }
 
-	public void excluir(Integer id) {
+	public void excluir(Integer id) throws VemNoX1Exception {
+		
+		long totalUsosDaCartaEmPartidas = cartaNaPartidaRepository.countByIdCarta(id);
+		
+		if(totalUsosDaCartaEmPartidas > 0 ) {
+			throw new VemNoX1Exception("Carta #" + id + "  já utilizada em partida(s), logo não pode ser excluída.");
+		}
+		
 		cartaRepository.deleteById(id);
 	}
 	

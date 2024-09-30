@@ -92,7 +92,7 @@ public class CartaController {
 
 	@Operation(summary = "Deletar carta por ID", description = "Remove uma carta específica pelo seu ID.")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+	public ResponseEntity<Void> excluir(@PathVariable Integer id) throws VemNoX1Exception {
 		cartaService.excluir(id);
 		return ResponseEntity.noContent().build();
 	}
