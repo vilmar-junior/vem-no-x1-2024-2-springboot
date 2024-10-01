@@ -52,7 +52,8 @@ public class CartaService {
 		long totalUsosDaCartaEmPartidas = cartaNaPartidaRepository.countByIdCarta(id);
 		
 		if(totalUsosDaCartaEmPartidas > 0 ) {
-			throw new VemNoX1Exception("Carta #" + id + "  já utilizada em partida(s), logo não pode ser excluída.");
+			throw new VemNoX1Exception("Carta #" + id + "  já utilizada em partida(s), "
+					+ "logo não pode ser excluída.");
 		}
 		
 		cartaRepository.deleteById(id);

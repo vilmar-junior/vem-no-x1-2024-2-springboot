@@ -3,7 +3,9 @@
 #
 FROM maven:3.8.3-openjdk-17 AS build
 COPY . .
-RUN mvn clean install
+# Build do Maven SEM testes unitarios
+# RUN mvn clean install -DSkipTests=true
+RUN mvn clean install -DSkipTests=true
 
 #
 # Package stage

@@ -2,6 +2,7 @@ package br.sc.senac.vemnox1.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -143,40 +145,25 @@ public class CartaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve excluir uma carta por ID")
+    //@DisplayName("Deve excluir uma carta por ID")
     public void testExcluirCasoSucesso() {
-    	Carta novaCarta = new Carta();
-    	novaCarta.setId(2);
-        novaCarta.setForca(2);
-        novaCarta.setInteligencia(4);
-        novaCarta.setVelocidade(2); 
-
-        Partida novaPartida = new Partida();
-        novaPartida.setId(1);
+    	int idCartaTestada = 2;
     	
-    	CartaNaPartida cartaNaPartida = new CartaNaPartida();
-    	cartaNaPartida.setCarta(novaCarta);
-		cartaNaPartida.setPartida(novaPartida);
-		
-		when(cartaRepository.save(novaCarta)).thenReturn(novaCarta);
-	    when(cartaNaPartidaRepository.save(cartaNaPartida)).thenReturn(cartaNaPartida);
-    	
-	    cartaRepository.save(novaCarta);
-	    cartaNaPartidaRepository.save(cartaNaPartida);
-	    
-        try {
-			cartaService.excluir(2);
+		try {
+			cartaService.excluir(idCartaTestada);
 		} catch (VemNoX1Exception e) {
-			fail("Carta 2 deveria ter sido excluída com sucesso");
+			fail("Deveria ter excluído. Causa: " + e.getMessage());
 		}
-        verify(cartaRepository, times(1)).deleteById(2);
+		
+        verify(cartaNaPartidaRepository, times(1)).countByIdCarta(idCartaTestada);
+        verify(cartaRepository, times(1)).deleteById(idCartaTestada);
     }
     
     @Test
-    @DisplayName("Deve lançar exceção ao tentar excluir uma carta já usada em uma partida")
+    //@DisplayName("Deve lançar exceção ao tentar excluir uma carta já usada em uma partida")
     public void testExcluirCasoCartaJaUsadaEmPartida() {
     	Integer idCartaParaExcluir = 3;
-    	
+    	 
 		// Simulação (mock) do repositório: a carta já foi utilizada em 5 partidas (valor arbitrado)
         when(cartaNaPartidaRepository.countByIdCarta(idCartaParaExcluir)).thenReturn(5L);
 
@@ -185,6 +172,7 @@ public class CartaServiceTest {
         });
 
         // Valida a mensagem de erro lançada no CartaService
+        assertNotNull(excecaoEsperada);
         assertThat(excecaoEsperada.getMessage()).contains("já utilizada em partida(s), logo não pode ser excluída");
         
 		// Verifica que o método deleteById do repositório não foi chamado
