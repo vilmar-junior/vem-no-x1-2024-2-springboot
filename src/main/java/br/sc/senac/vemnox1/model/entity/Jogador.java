@@ -1,10 +1,17 @@
 package br.sc.senac.vemnox1.model.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import br.sc.senac.vemnox1.model.enums.PerfilAcesso;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +22,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Jogador {
+public class Jogador implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +45,23 @@ public class Jogador {
 
 	private int totalPartidas;
 	private double percentualVitorias;
-	//private PerfilAcesso perfil;
-	//private String idSessao;
+	
+	private PerfilAcesso perfil;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		//TODO
+		
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
 }
