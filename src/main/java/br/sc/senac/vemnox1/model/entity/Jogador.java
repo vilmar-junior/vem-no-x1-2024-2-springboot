@@ -24,7 +24,8 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Jogador implements UserDetails { // interface incluída para que o Jogador autentique-se via Spring Security
+//interface incluída para que o Jogador autentique-se via Spring Security
+public class Jogador implements UserDetails { 
 
 	private static final long serialVersionUID = 3667682428012659277L;
 

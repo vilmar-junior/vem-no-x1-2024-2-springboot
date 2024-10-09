@@ -15,7 +15,7 @@
 	<description>Vem no X1 V2 - SpringBoot</description>
 
 	<!-- Adicionando para posterior deploy no render -->
-<!--	<packaging>war</packaging>-->
+	<!--	<packaging>war</packaging>-->
 	
 	<url/>
 	<licenses>

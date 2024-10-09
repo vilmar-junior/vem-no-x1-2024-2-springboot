@@ -22,9 +22,11 @@ public class JwtService {
 
     public  String getGenerateToken(Authentication authentication) {
         Instant now = Instant.now();
-        long expiry = 36000L;
+        
+        // será usado para definir tempo do token
+        long dezHorasEmSegundos = 36000L; 
 
-        String scope = authentication
+        String rles = authentication
                 .getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors
@@ -33,11 +35,11 @@ public class JwtService {
         Jogador jogadorAutenticado = (Jogador) authentication.getPrincipal();
         
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer("vem-no-x1")			    // emissor do token
-                .issuedAt(now) 						// data/hora em que o token foi emitido
-                .expiresAt(now.plusSeconds(expiry)) // expiração do token, em segundos. O token é válido como 36000 segundos (10 horas) após a geração do token:
-                .subject(authentication.getName())  // nome do usuario
-                .claim("roles", scope)              // perfis ou permissões 'roles' - "ROLE_USER", "ROLE_ADMIN"
+                .issuer("vem-no-x1")			                // emissor do token
+                .issuedAt(now) 						            // data/hora em que o token foi emitido
+                .expiresAt(now.plusSeconds(dezHorasEmSegundos)) // expiração do token, em segundos.
+                .subject(authentication.getName())              // nome do usuário
+                .claim("roles", rles)                          // perfis ou permissões (roles)
                 .claim("idJogador", jogadorAutenticado.getId()) // mais propriedades adicionais no token
                 .build();
         

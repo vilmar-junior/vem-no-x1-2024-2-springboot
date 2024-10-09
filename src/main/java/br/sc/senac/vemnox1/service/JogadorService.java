@@ -3,6 +3,9 @@ package br.sc.senac.vemnox1.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
@@ -10,10 +13,18 @@ import br.sc.senac.vemnox1.model.entity.Jogador;
 import br.sc.senac.vemnox1.model.repository.JogadorRepository;
 
 @Service
-public class JogadorService {
+public class JogadorService implements UserDetailsService {
 	
 	@Autowired
 	private JogadorRepository repository;
+	
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByEmail(username)
+                .orElseThrow(
+                	() -> new UsernameNotFoundException("Usuário não encontrado" + username)
+                 );
+    }
 	
 	public List<Jogador> pesquisarTodos(){
 		return repository.findAll();
