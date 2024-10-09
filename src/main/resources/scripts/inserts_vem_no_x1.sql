@@ -103,3 +103,22 @@ INSERT INTO jogador
 VALUES('Marcos André Batista', 'vampeta8@gmail.com', '1974-03-13', 0, 0);
 
 
+select * from users;
+
+------------------------------------------------------------------------------------------------
+-- V3: AUTENTICAÇÃO COM JWT
+------------------------------------------------------------------------------------------------
+
+--https://bcrypt-generator.com/
+
+--senha: pele10
+--senha cifrada: $2a$12$Ckqb.anONQ7ud9fjlzAFG.nqjAf592CiwmVC575vlInVKuh..wjYi
+UPDATE vemnox1.jogador
+SET senha='$2a$12$Ckqb.anONQ7ud9fjlzAFG.nqjAf592CiwmVC575vlInVKuh..wjYi'
+WHERE email = 'pele10@gmail.com';
+
+--senha: dunga5
+--senha cifrada: $2a$12$O7O76NE.kEzvTpV2pubhLOk.ClZKgkgA1RwHyXdIsov7mXvuUTKZ6
+UPDATE vemnox1.jogador
+SET senha='$2a$12$O7O76NE.kEzvTpV2pubhLOk.ClZKgkgA1RwHyXdIsov7mXvuUTKZ6'
+WHERE email = 'dunga5@gmail.com';
