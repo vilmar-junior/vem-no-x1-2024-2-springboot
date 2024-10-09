@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.sc.senac.vemnox1.auth.AuthenticationService;
-import br.sc.senac.vemnox1.model.dto.UsuarioLoginDTO;
 
 @RestController
 @RequestMapping(path = "/auth")
