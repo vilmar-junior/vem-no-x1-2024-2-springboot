@@ -30,11 +30,7 @@ public class PartidaController {
 	
 	@GetMapping("/por-jogador/{id}")
 	public List<Partida> consultarPartidasDoJogador(@PathParam("id") int id) throws VemNoX1Exception{
-		
 		Jogador jogadorAutenticado = authService.getUsuarioAutenticado();
-		if(jogadorAutenticado == null) {
-			throw new VemNoX1Exception("Usuário não encontrado");
-		}
 
 		if(jogadorAutenticado.getPerfil() == PerfilAcesso.JOGADOR
 				&& jogadorAutenticado.getId() != id) {
@@ -44,15 +40,14 @@ public class PartidaController {
 		return this.partidaService.consultarPartidasDoJogador(id);
 	}
 	
-	@GetMapping("/iniciar/{idJogador}")
-	public PartidaDTO iniciarPartida(@PathParam("idJogador") int idJogador) throws VemNoX1Exception{
-		return this.partidaService.iniciarPartida(idJogador);
+	@GetMapping("/iniciar")
+	public PartidaDTO iniciarPartida() throws VemNoX1Exception{
+		Jogador jogadorAutenticado = authService.getUsuarioAutenticado();
+		return this.partidaService.iniciarPartida(jogadorAutenticado.getId());
 	}
 	
 	@PostMapping("/jogar")
 	public PartidaDTO jogar(JogadaDTO jogada) throws VemNoX1Exception{
-		//TODO validar se o usuário autenticado realmente pode jogar essa partida
-		
 		return this.partidaService.jogar(jogada);
 	}
 	

@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.entity.Jogador;
 
 @Service
@@ -20,7 +21,7 @@ public class AuthenticationService {
         return jwtService.getGenerateToken(authentication);
     }
     
-    public Jogador getUsuarioAutenticado() {
+    public Jogador getUsuarioAutenticado() throws VemNoX1Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jogador jogadorAutenticado = null;
         
@@ -32,6 +33,11 @@ public class AuthenticationService {
                 jogadorAutenticado = (Jogador) userDetails; 
             } 
         }
+        
+        if(jogadorAutenticado == null) {
+			throw new VemNoX1Exception("Usuário não encontrado");
+		}
+        
         return jogadorAutenticado;
     }
 }

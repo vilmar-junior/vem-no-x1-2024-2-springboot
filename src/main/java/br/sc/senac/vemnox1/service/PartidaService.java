@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.sc.senac.vemnox1.auth.AuthenticationService;
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.dto.JogadaDTO;
 import br.sc.senac.vemnox1.model.dto.PartidaDTO;
@@ -39,6 +40,9 @@ public class PartidaService {
 	
 	@Autowired
 	private CartaNaPartidaRepository cartaNaPartidaRepository;
+	
+	@Autowired
+	private AuthenticationService authService;
 	
 	public List<Partida> pesquisarTodas(){
 		return partidaRepository.findAll();
@@ -147,9 +151,13 @@ public class PartidaService {
 				cartaNaPartidaRepository.findByJogada(
 						jogada.getIdPartida(), jogada.getIdCartaSelecionada());
 		
-		
 		if(partida == null) {
 			throw new VemNoX1Exception("Partida não encontrada");
+		}
+		
+		Jogador jogadorAutenticado = authService.getUsuarioAutenticado();
+		if(partida.getJogador() != jogadorAutenticado) {
+			throw new VemNoX1Exception("Usuário autenticado não é dono da partida informada");
 		}
 		
 		if(cartaSelecionadaPeloJogador == null) {
