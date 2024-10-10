@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,14 +24,14 @@ import br.sc.senac.vemnox1.model.entity.Colecao;
 import jakarta.validation.ConstraintViolationException;
 
 
-//Anotação usada para subir uma base local (ex.: MySQL)
-@SpringBootTest 
 
 //Caso queira usar a base H2 utilize
 //@DataJpaTest
 
 //Aponta para o DataSource configurado em application-test.properties
 //ou para a base com a propriedade test no pom
+//Anotação usada para subir uma base local (ex.: MySQL)
+@SpringBootTest 
 @ActiveProfiles("test") 
 public class CartaRepositoryTest {
 
@@ -40,6 +41,7 @@ public class CartaRepositoryTest {
     @Autowired
     private ColecaoRepository colecaoRepository;
 
+    //Executado ANTES de CADA teste
     @BeforeEach
     public void setUp() {
         // Carregar 10 cartas no banco de dados antes de cada teste
@@ -63,7 +65,14 @@ public class CartaRepositoryTest {
         cartaRepository.saveAll(cartas); // Persiste as 10 cartas no banco (configurado no application-test.properties)
     }
     
-    //@Test
+    //Executado APÓS a execução de CADA teste
+    @AfterEach
+    public void tearDown() {
+    	//Limpa os registros
+    	cartaRepository.deleteAll();
+    }
+    
+    @Test
     public void testInserirTodosCamposPreenchidos() {
         Carta carta = new Carta();
         carta.setNome("Adriano de Melow");
