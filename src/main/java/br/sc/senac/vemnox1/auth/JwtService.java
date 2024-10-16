@@ -26,7 +26,7 @@ public class JwtService {
         // será usado para definir tempo do token
         long dezHorasEmSegundos = 36000L; 
 
-        String rles = authentication
+        String roles = authentication
                 .getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors
@@ -39,7 +39,7 @@ public class JwtService {
                 .issuedAt(now) 						            // data/hora em que o token foi emitido
                 .expiresAt(now.plusSeconds(dezHorasEmSegundos)) // expiração do token, em segundos.
                 .subject(authentication.getName())              // nome do usuário
-                .claim("roles", rles)                          // perfis ou permissões (roles)
+                .claim("roles", roles)                           // perfis ou permissões (roles)
                 .claim("idJogador", jogadorAutenticado.getId()) // mais propriedades adicionais no token
                 .build();
         

@@ -39,6 +39,7 @@ public class Jogador implements UserDetails {
 	@Column(nullable = false)
 	private String email;
 	
+	@Column(length = 4000)
 	private String senha;
 	
 	@Column(nullable = false)
