@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.entity.Jogador;
+import br.sc.senac.vemnox1.model.enums.PerfilAcesso;
 import br.sc.senac.vemnox1.model.repository.JogadorRepository;
 
 @Service
@@ -36,7 +37,7 @@ public class JogadorService implements UserDetailsService {
 
 	public Jogador inserir(Jogador novoJogador) {
 		//TODO incluir depois
-		//validarPerfilJogador(novoJogador);
+		validarPerfilJogador(novoJogador);
 		return repository.save(novoJogador);
 	}
 
@@ -52,5 +53,11 @@ public class JogadorService implements UserDetailsService {
 	public boolean excluir(int id) {
 		this.repository.deleteById(id);
 		return true;
+	}
+	
+	private void validarPerfilJogador(Jogador umJogador) {
+		if(umJogador.getPerfil() == null) {
+			umJogador.setPerfil(PerfilAcesso.JOGADOR);
+		}
 	}
 }

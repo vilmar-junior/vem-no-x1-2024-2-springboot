@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.entity.Jogador;
 import br.sc.senac.vemnox1.service.JogadorService;
-import br.sc.senac.vemnox1.service.PartidaService;
 
 @RestController
 @RequestMapping(path = "/api/jogador")
@@ -36,10 +35,11 @@ public class JogadorController {
 		return jogadorService.pesquisarPorId(id);
 	}
 	
-	@PostMapping
-	public Jogador salvar(@RequestBody Jogador novoJogador) {
-		return jogadorService.inserir(novoJogador);
-	}
+	//Movido para AuthenticationController --> registrarJogador
+//	@PostMapping
+//	public Jogador salvar(@RequestBody Jogador novoJogador) {
+//		return jogadorService.inserir(novoJogador);
+//	}
 	
 	@PutMapping
 	public Jogador atualizar(@RequestBody Jogador novoJogador) throws VemNoX1Exception {
