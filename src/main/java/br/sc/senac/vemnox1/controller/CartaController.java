@@ -113,4 +113,8 @@ public class CartaController {
 	public List<CartaDTO> pesquisarComSeletorDTO(@RequestBody CartaSeletor seletor) {
 		return this.cartaService.pesquisarComSeletorDTO(seletor);
 	}
+	
+	
+	
+	
 }

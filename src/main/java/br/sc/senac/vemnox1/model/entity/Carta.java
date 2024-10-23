@@ -1,12 +1,10 @@
 package br.sc.senac.vemnox1.model.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import br.sc.senac.vemnox1.model.dto.CartaDTO;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -52,6 +49,8 @@ public class Carta {
 	
 	@CreationTimestamp
 	private LocalDateTime dataCadastro;
+	
+	private byte[] imagem;
 	
     public int getTotalAtributos() {
         return this.forca + this.inteligencia + this.velocidade;
