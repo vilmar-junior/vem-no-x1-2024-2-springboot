@@ -44,7 +44,7 @@ public class CartaController {
 
 	@PostMapping("/upload")
 	public void fazerUploadCarta(@RequestParam("imagem") MultipartFile imagem,
-									@RequestParam("idCarta") String idCarta) 
+								 @RequestParam("idCarta") String idCarta) 
 			throws VemNoX1Exception, IOException {
 		
 		if(imagem == null) {
