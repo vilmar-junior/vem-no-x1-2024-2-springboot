@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.dto.CartaDTO;
@@ -23,6 +24,28 @@ public class CartaService {
 	
 	@Autowired
 	private CartaNaPartidaRepository cartaNaPartidaRepository;
+	
+	@Autowired
+	private ImagemService imagemService;
+	
+	
+	public void salvarImagemCarta(MultipartFile imagem, Integer idCarta) throws VemNoX1Exception {
+		
+		Carta cartaComNovaImagem = cartaRepository
+										.findById(idCarta)
+										.orElseThrow(() -> new VemNoX1Exception("Carta não encontrada"));
+		
+		//Converter a imagem para base64
+		String imagemBase64 = imagemService.processarImagem(imagem);
+		
+		//Inserir a imagem na coluna imagemEmBase64 da carta
+		
+		//TODO ajustar para fazer o upload
+		cartaComNovaImagem.setImagemEmBase64(imagemBase64);
+		
+		//Chamar cartaRepository para persistir a imagem na carta
+		cartaRepository.save(cartaComNovaImagem);
+	}
 	
 	//Propriedade definida no application.properties
 	@Value("${vemnox1.datasource}")

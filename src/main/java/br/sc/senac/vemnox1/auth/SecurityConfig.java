@@ -43,7 +43,7 @@ public class SecurityConfig {
                 		//Hierarquia de permissões e bloqueios
                         auth -> auth
                         		//URLs liberadas
-                        		.requestMatchers("/authenticate", "/public").permitAll()
+                        		.requestMatchers("/auth/*", "/public").permitAll()
                         		
                         		//Todas as demais são bloqueadas
                                 .anyRequest().authenticated())

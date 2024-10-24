@@ -50,7 +50,8 @@ public class Carta {
 	@CreationTimestamp
 	private LocalDateTime dataCadastro;
 	
-	private byte[] imagem;
+	//TODO mapear adequadamente
+	private String imagemEmBase64;
 	
     public int getTotalAtributos() {
         return this.forca + this.inteligencia + this.velocidade;

@@ -1,5 +1,6 @@
 package br.sc.senac.vemnox1.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import br.sc.senac.vemnox1.auth.AuthenticationService;
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.dto.CartaDTO;
 import br.sc.senac.vemnox1.model.entity.Carta;
+import br.sc.senac.vemnox1.model.entity.Jogador;
+import br.sc.senac.vemnox1.model.enums.PerfilAcesso;
 import br.sc.senac.vemnox1.model.seletor.CartaSeletor;
 import br.sc.senac.vemnox1.service.CartaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +38,40 @@ public class CartaController {
 
 	@Autowired
 	private CartaService cartaService;
+	
+	@Autowired
+	private AuthenticationService authService;
 
+	@PostMapping("/upload")
+	public void fazerUploadCarta(@RequestParam("imagem") MultipartFile imagem,
+									@RequestParam("idCarta") String idCarta) 
+			throws VemNoX1Exception, IOException {
+		
+		if(imagem == null) {
+			throw new VemNoX1Exception("Arquivo inválido");
+		}
+		
+		Integer idCartaConvertidoParaInteger;
+		try {
+			idCartaConvertidoParaInteger = Integer.parseInt(idCarta);
+		} catch (NumberFormatException e) {
+			throw new VemNoX1Exception("idCarta inválido");
+		}
+		
+		//TODO verificar
+//		Jogador jogadorAutenticado = authService.getUsuarioAutenticado();
+//		if(jogadorAutenticado == null) {
+//			throw new VemNoX1Exception("Usuário não encontrado");
+//		}
+//
+//		if(jogadorAutenticado.getPerfil() == PerfilAcesso.JOGADOR) {
+//			throw new VemNoX1Exception("Usuário sem permissão de acesso");
+//		}
+		
+		cartaService.salvarImagemCarta(imagem, idCartaConvertidoParaInteger);
+	}
+	
+	
 	@Operation(summary = "Listar todas as cartas", 
 			   description = "Retorna uma lista de todas as cartas cadastradas no sistema.",
 			   responses = {
