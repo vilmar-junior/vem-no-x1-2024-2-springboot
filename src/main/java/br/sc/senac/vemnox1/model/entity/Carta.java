@@ -53,7 +53,6 @@ public class Carta {
 	private LocalDateTime dataCadastro;
 	
 	//TODO mapear adequadamente
-	@Lob
 	@Column(columnDefinition = "LONGTEXT")
 	private String imagemEmBase64;
 	
