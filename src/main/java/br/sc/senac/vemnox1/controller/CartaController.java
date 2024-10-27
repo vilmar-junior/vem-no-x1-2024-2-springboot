@@ -21,6 +21,8 @@ import br.sc.senac.vemnox1.auth.AuthenticationService;
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.dto.CartaDTO;
 import br.sc.senac.vemnox1.model.entity.Carta;
+import br.sc.senac.vemnox1.model.entity.Jogador;
+import br.sc.senac.vemnox1.model.enums.PerfilAcesso;
 import br.sc.senac.vemnox1.model.seletor.CartaSeletor;
 import br.sc.senac.vemnox1.service.CartaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,10 +30,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/cartas")
+@MultipartConfig(fileSizeThreshold = 10485760) // 10MB
+//https://www.gigacalculator.com/converters/convert-mb-to-bytes.php
 public class CartaController {
 
 	@Autowired
@@ -50,18 +55,7 @@ public class CartaController {
 				schema = @Schema(type = "string", format = "binary")
 			)
 		),
-		description = "Realiza o upload de uma imagem associada a uma carta específica.",
-		responses = {
-			@ApiResponse(
-				responseCode = "200",
-				description = "Upload realizado com sucesso"
-			),
-			@ApiResponse(
-				responseCode = "400",
-				description = "Parâmetros inválidos ou imagem não fornecida",
-				content = @Content(schema = @Schema(implementation = VemNoX1Exception.class))
-			)
-		}
+		description = "Realiza o upload de uma imagem associada a uma carta específica."
 	)
 	@PostMapping("/upload")
 	public void fazerUploadCarta(@RequestParam("imagem") MultipartFile imagem,
@@ -79,15 +73,14 @@ public class CartaController {
 			throw new VemNoX1Exception("idCarta inválido");
 		}
 
-		//TODO verificar
-		//		Jogador jogadorAutenticado = authService.getUsuarioAutenticado();
-		//		if(jogadorAutenticado == null) {
-		//			throw new VemNoX1Exception("Usuário não encontrado");
-		//		}
-		//
-		//		if(jogadorAutenticado.getPerfil() == PerfilAcesso.JOGADOR) {
-		//			throw new VemNoX1Exception("Usuário sem permissão de acesso");
-		//		}
+		Jogador jogadorAutenticado = authService.getUsuarioAutenticado();
+		if(jogadorAutenticado == null) {
+			throw new VemNoX1Exception("Usuário não encontrado");
+		}
+
+		if(jogadorAutenticado.getPerfil() == PerfilAcesso.JOGADOR) {
+			throw new VemNoX1Exception("Usuário sem permissão de acesso");
+		}
 
 		cartaService.salvarImagemCarta(imagem, idCartaConvertidoParaInteger);
 	}
