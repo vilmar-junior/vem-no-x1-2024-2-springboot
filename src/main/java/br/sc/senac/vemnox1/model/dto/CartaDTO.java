@@ -1,6 +1,5 @@
 package br.sc.senac.vemnox1.model.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;

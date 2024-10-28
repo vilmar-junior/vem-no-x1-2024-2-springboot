@@ -1,5 +1,6 @@
 package br.sc.senac.vemnox1.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import br.sc.senac.vemnox1.auth.AuthenticationService;
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.dto.CartaDTO;
 import br.sc.senac.vemnox1.model.entity.Carta;
+import br.sc.senac.vemnox1.model.entity.Jogador;
+import br.sc.senac.vemnox1.model.enums.PerfilAcesso;
 import br.sc.senac.vemnox1.model.seletor.CartaSeletor;
 import br.sc.senac.vemnox1.service.CartaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,20 +30,67 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/cartas")
+@MultipartConfig(fileSizeThreshold = 10485760) // 10MB
+//https://www.gigacalculator.com/converters/convert-mb-to-bytes.php
 public class CartaController {
 
 	@Autowired
 	private CartaService cartaService;
 
+	@Autowired
+	private AuthenticationService authService;
+
+	@Operation(
+		summary = "Upload de Imagem para Carta",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+			description = "Arquivo de imagem a ser enviado",
+			required = true,
+			content = @Content(
+				mediaType = "multipart/form-data",
+				schema = @Schema(type = "string", format = "binary")
+			)
+		),
+		description = "Realiza o upload de uma imagem associada a uma carta específica."
+	)
+	@PostMapping("/upload")
+	public void fazerUploadCarta(@RequestParam("imagem") MultipartFile imagem,
+			@RequestParam("idCarta") String idCarta) 
+					throws VemNoX1Exception, IOException {
+
+		if(imagem == null) {
+			throw new VemNoX1Exception("Arquivo inválido");
+		}
+
+		Integer idCartaConvertidoParaInteger;
+		try {
+			idCartaConvertidoParaInteger = Integer.parseInt(idCarta);
+		} catch (NumberFormatException e) {
+			throw new VemNoX1Exception("idCarta inválido");
+		}
+
+		Jogador jogadorAutenticado = authService.getUsuarioAutenticado();
+		if(jogadorAutenticado == null) {
+			throw new VemNoX1Exception("Usuário não encontrado");
+		}
+
+		if(jogadorAutenticado.getPerfil() == PerfilAcesso.JOGADOR) {
+			throw new VemNoX1Exception("Usuário sem permissão de acesso");
+		}
+
+		cartaService.salvarImagemCarta(imagem, idCartaConvertidoParaInteger);
+	}
+
+
 	@Operation(summary = "Listar todas as cartas", 
-			   description = "Retorna uma lista de todas as cartas cadastradas no sistema.",
-			   responses = {
+			description = "Retorna uma lista de todas as cartas cadastradas no sistema.",
+			responses = {
 					@ApiResponse(responseCode = "200", description = "Lista de cartas retornada com sucesso")
-				})
+	})
 	@GetMapping
 	public List<Carta> pesquisarTodas() {
 		List<Carta> cartas = cartaService.pesquisarTodas();
@@ -45,34 +98,34 @@ public class CartaController {
 	}
 
 	@Operation(summary = "Pesquisar cartas com filtros", 
-			   description = "Retorna uma lista de cartas que atendem aos critérios especificados no seletor.")
+			description = "Retorna uma lista de cartas que atendem aos critérios especificados no seletor.")
 	@PostMapping("/filtro")
 	public List<Carta> pesquisarComSeletor(@RequestBody CartaSeletor seletor) {
 		return cartaService.pesquisarComSeletor(seletor);
 	}
 
 	@Operation(summary = "Pesquisar carta por ID", 
-			   description = "Busca uma carta específica pelo seu ID.")
+			description = "Busca uma carta específica pelo seu ID.")
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<Carta> pesquisarPorId(@PathVariable int id) throws VemNoX1Exception {
 		Carta carta = cartaService.pesquisarPorId(id);
 		return ResponseEntity.ok(carta);
 	}
-	
+
 	@PostMapping("/total-paginas")
 	public int contarPaginas(CartaSeletor seletor) {
 		return this.cartaService.contarPaginas(seletor);
 	}
 
 	@Operation(summary = "Inserir nova carta", 
-			   description = "Adiciona uma nova carta ao sistema.",
-			   responses = {
+			description = "Adiciona uma nova carta ao sistema.",
+			responses = {
 					@ApiResponse(responseCode = "201", description = "Carta criada com sucesso", 
-								 content = @Content(mediaType = "application/json",
-								 schema = @Schema(implementation = Carta.class))),
+							content = @Content(mediaType = "application/json",
+							schema = @Schema(implementation = Carta.class))),
 					@ApiResponse(responseCode = "400", description = "Erro de validação ou regra de negócio", 
-						    	 content = @Content(mediaType = "application/json", 
-						    	 examples = @ExampleObject(value = "{\"message\": \"Erro de validação: campo X é obrigatório\", \"status\": 400}")))})
+					content = @Content(mediaType = "application/json", 
+					examples = @ExampleObject(value = "{\"message\": \"Erro de validação: campo X é obrigatório\", \"status\": 400}")))})
 	@PostMapping
 	public ResponseEntity<Carta> salvar(@Valid @RequestBody Carta novaCarta) {
 		//Solução 1: tratar o response HTTP em cada exceção lançada
@@ -96,21 +149,25 @@ public class CartaController {
 		cartaService.excluir(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@GetMapping("/sortear")
 	public List<Carta> sortear(){
 		return this.cartaService.sortearSeisCartas();
 	}
-	
+
 	@GetMapping("/dto/todas")
 	public List<CartaDTO> pesquisarTodasDTO(){
 		return this.cartaService.pesquisarTodasDTO();
 	}
-	
+
 	@Operation(summary = "Pesquisar cartas com filtros (retorna CartaDTO)", 
-			   description = "Retorna uma lista de CartaDTO conforme os critérios especificados no seletor.")
+			description = "Retorna uma lista de CartaDTO conforme os critérios especificados no seletor.")
 	@PostMapping("/dto/filtro")
 	public List<CartaDTO> pesquisarComSeletorDTO(@RequestBody CartaSeletor seletor) {
 		return this.cartaService.pesquisarComSeletorDTO(seletor);
 	}
+
+
+
+
 }
