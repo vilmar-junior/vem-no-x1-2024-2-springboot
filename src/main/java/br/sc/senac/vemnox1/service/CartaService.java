@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -105,7 +106,17 @@ public class CartaService {
 	}
 
 	public int contarPaginas(CartaSeletor seletor) {
-		return (int) cartaRepository.count(seletor);
+	    if (seletor != null && seletor.temPaginacao()) {
+	        int pageSize = seletor.getLimite();
+	        PageRequest pagina = PageRequest.of(0, pageSize); // Página inicial apenas para contar
+
+	        Page<Carta> paginaResultado = cartaRepository.findAll(seletor, pagina);
+	        return paginaResultado.getTotalPages(); // Retorna o número total de páginas
+	    }
+
+	    // Se não houver paginação, retorna 1 página se houver registros, ou 0 se não houver registros.
+	    long totalRegistros = cartaRepository.count(seletor);
+	    return totalRegistros > 0 ? 1 : 0;
 	}
 
 	public List<Carta> sortearSeisCartas() {

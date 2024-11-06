@@ -113,7 +113,7 @@ public class CartaController {
 	}
 
 	@PostMapping("/total-paginas")
-	public int contarPaginas(CartaSeletor seletor) {
+	public int contarPaginas(@RequestBody CartaSeletor seletor) {
 		return this.cartaService.contarPaginas(seletor);
 	}
 
