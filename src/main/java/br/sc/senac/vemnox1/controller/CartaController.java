@@ -21,13 +21,13 @@ import br.sc.senac.vemnox1.auth.AuthenticationService;
 import br.sc.senac.vemnox1.exception.VemNoX1Exception;
 import br.sc.senac.vemnox1.model.dto.CartaDTO;
 import br.sc.senac.vemnox1.model.entity.Carta;
+import br.sc.senac.vemnox1.model.entity.Colecao;
 import br.sc.senac.vemnox1.model.entity.Jogador;
 import br.sc.senac.vemnox1.model.enums.PerfilAcesso;
 import br.sc.senac.vemnox1.model.seletor.CartaSeletor;
 import br.sc.senac.vemnox1.service.CartaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -57,20 +57,13 @@ public class CartaController {
 		),
 		description = "Realiza o upload de uma imagem associada a uma carta específica."
 	)
-	@PostMapping("/upload")
+	@PostMapping("/{id}/upload")
 	public void fazerUploadCarta(@RequestParam("imagem") MultipartFile imagem,
-			@RequestParam("idCarta") String idCarta) 
+								 @PathVariable Integer id) 
 					throws VemNoX1Exception, IOException {
 
 		if(imagem == null) {
 			throw new VemNoX1Exception("Arquivo inválido");
-		}
-
-		Integer idCartaConvertidoParaInteger;
-		try {
-			idCartaConvertidoParaInteger = Integer.parseInt(idCarta);
-		} catch (NumberFormatException e) {
-			throw new VemNoX1Exception("idCarta inválido");
 		}
 
 		Jogador jogadorAutenticado = authService.getUsuarioAutenticado();
@@ -82,7 +75,7 @@ public class CartaController {
 			throw new VemNoX1Exception("Usuário sem permissão de acesso");
 		}
 
-		cartaService.salvarImagemCarta(imagem, idCartaConvertidoParaInteger);
+		cartaService.salvarImagemCarta(imagem, id);
 	}
 
 
@@ -117,19 +110,14 @@ public class CartaController {
 		return this.cartaService.contarPaginas(seletor);
 	}
 
-	@Operation(summary = "Inserir nova carta", 
-			description = "Adiciona uma nova carta ao sistema.",
-			responses = {
-					@ApiResponse(responseCode = "201", description = "Carta criada com sucesso", 
-							content = @Content(mediaType = "application/json",
-							schema = @Schema(implementation = Carta.class))),
-					@ApiResponse(responseCode = "400", description = "Erro de validação ou regra de negócio", 
-					content = @Content(mediaType = "application/json", 
-					examples = @ExampleObject(value = "{\"message\": \"Erro de validação: campo X é obrigatório\", \"status\": 400}")))})
 	@PostMapping
 	public ResponseEntity<Carta> salvar(@Valid @RequestBody Carta novaCarta) {
 		//Solução 1: tratar o response HTTP em cada exceção lançada
 		try {
+			//TODO incluir coleção na tela
+			Colecao c = new Colecao();
+			c.setId(1);
+			novaCarta.setColecao(c);
 			Carta cartaSalva = cartaService.inserir(novaCarta);
 			return new ResponseEntity(cartaSalva, HttpStatus.CREATED);
 		} catch (VemNoX1Exception e) {
